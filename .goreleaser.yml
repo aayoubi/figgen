@@ -2,7 +2,7 @@ project_name: figgen
 
 release:
   prerelease: auto
-  name_template: "FIGGEN {{.Version}}"
+  name_template: "figgen {{.Version}}"
 
 before:
   hooks:
