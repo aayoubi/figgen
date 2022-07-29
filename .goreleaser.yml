@@ -1,0 +1,34 @@
+project_name: figgen
+
+release:
+  prerelease: auto
+  name_template: "FIGGEN {{.Version}}"
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - <<: &build_defaults
+      binary: figgen
+      main: ./main.go
+    id: macos
+    goos: [darwin]
+    goarch: [amd64, arm64]
+
+  - <<: *build_defaults
+    id: linux
+    goos: [linux]
+    goarch: [386, arm, amd64, arm64]
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - id: nix
+    builds: [macos, linux]
+    <<: &archive_defaults
+      name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    wrap_in_directory: true
+    replacements:
+      darwin: macOS
+    format: tar.gz
