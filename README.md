@@ -1,6 +1,6 @@
 # Figgen
 
-A config generator for `fig`
+A config generator for [`fig`](https://github.com/algolia/fake-insights-generator)
 
 # Usage
 
