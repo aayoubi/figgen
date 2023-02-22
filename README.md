@@ -5,21 +5,24 @@ A config generator for [`fig`](https://github.com/algolia/fake-insights-generato
 # Usage
 
 ```
-% figgen -h
-Generate fig's recommend.json
+% ./figgen -h
+Generate fig's input data based on your index data
 
 Usage:
   figgen [flags]
+  figgen [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  qcat        Generate fig's events searches.json optimized for Query Categorization
+  recommend   Generate fig's recommend.json
 
 Flags:
-  -k, --api-key string      Algolia API key
-  -a, --app-id string       Algolia Application ID
-  -f, --facet-name string   Facet name for FBT categorizations in jsonpath format. You must use the Hierarchical Categories facet. (default "$.hierarchical_categories.lvl2")
-  -h, --help                help for figgen
-  -i, --index-name string   Index name
-  -o, --output string       Output file name
-      --seed int            Specify a seed for the random number generator (default 1659086526896243000)
-  -s, --seperator string    Hierearchical categories seperator (default ">")
+  -h, --help      help for figgen
+  -v, --version   version for figgen
+
+Use "figgen [command] --help" for more information about a command.
 ```
 
 # Sample
