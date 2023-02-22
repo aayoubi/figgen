@@ -2,7 +2,6 @@ package qcat
 
 import (
 	"bufio"
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -124,9 +123,8 @@ func facetValues(s *search.Index, facet, filters string) ([]string, error) {
 
 func generateQueriesUsingFacetCombinations(cfg *Config) ([]string, error) {
 	var searches []string
-	ctx := context.TODO()
 	for _, combination := range cfg.Combinations {
-		values, err := generateFacetCombination(ctx, cfg.SearchIndex, combination, 0, "")
+		values, err := generateFacetCombination(cfg.SearchIndex, combination, 0, "")
 		if err != nil {
 			return nil, err
 		}
@@ -137,10 +135,7 @@ func generateQueriesUsingFacetCombinations(cfg *Config) ([]string, error) {
 	return searches, nil
 }
 
-func generateFacetCombination(ctx context.Context, s *search.Index, facets []string, i int, filters string) ([]string, error) {
-	if ctx.Err() != nil {
-		return nil, ctx.Err()
-	}
+func generateFacetCombination(s *search.Index, facets []string, i int, filters string) ([]string, error) {
 	name := facets[i]
 	values, err := facetValues(s, name, filters)
 	if err != nil {
@@ -149,21 +144,17 @@ func generateFacetCombination(ctx context.Context, s *search.Index, facets []str
 	if len(facets) == i+1 {
 		return values, nil
 	}
-
 	var res []string
 	for _, val := range values {
 		if skipSpecialIfSpecialChars(val) {
 			continue
 		}
-
 		newFilters := filters
 		if newFilters != "" {
 			newFilters += " AND "
 		}
-
 		newFilters += fmt.Sprintf(`"%s":"%s"`, name, val)
-
-		nested, err := generateFacetCombination(ctx, s, facets, i+1, newFilters)
+		nested, err := generateFacetCombination(s, facets, i+1, newFilters)
 		if err != nil {
 			return nil, err
 		}
